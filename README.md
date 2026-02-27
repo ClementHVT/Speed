@@ -6,3 +6,4 @@
 ```go get github.com/shirou/gopsutil/v3/mem```
 ```go get github.com/charmbracelet/bubbletea```
 
+```go run main.go```

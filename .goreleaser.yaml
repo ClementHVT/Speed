@@ -29,7 +29,7 @@ archives:
 
 source:
   enabled: true
-  formats: [zip]
+  format: zip
   name_template: "{{ .ProjectName }}_{{ .Version }}_source"
 
 checksum:

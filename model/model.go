@@ -10,9 +10,10 @@ import (
 
 // Model represents app state
 type Model struct {
-	CPU stats.CPUStats
-	Mem stats.MemStats
-	Err error
+	CPU     stats.CPUStats
+	Mem     stats.MemStats
+	Err     error
+	Version string
 
 	UI UIData
 }

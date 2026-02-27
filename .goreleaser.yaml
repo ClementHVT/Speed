@@ -20,24 +20,17 @@ builds:
       - -s -w -X main.version={{.Version}}
 
 archives:
-  # This section creates the platform-specific zips (Binary + Docs)
   - id: binary-packages
-    format: zip
+    formats: [zip] 
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - LICENSE
       - README.md
 
-  # This section creates a single zip of the source code
-  - id: source-code
-    format: zip
-    name_template: "{{ .ProjectName }}_{{ .Version }}_source"
-    files:
-      - "**/*.go"
-      - go.mod
-      - go.sum
-      - LICENSE
-      - README.md
+source:
+  enabled: true
+  formats: [zip]
+  name_template: "{{ .ProjectName }}_{{ .Version }}_source"
 
 checksum:
   name_template: 'checksums.txt'

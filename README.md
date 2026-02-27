@@ -6,9 +6,9 @@
 
 ### Libraries
 
-```go get github.com/shirou/gopsutil/v3/cpu```
+```go get github.com/shirou/gopsutil/v4/cpu```
 
-```go get github.com/shirou/gopsutil/v3/mem```
+```go get github.com/shirou/gopsutil/v4/mem```
 
 ```go get github.com/charmbracelet/bubbletea```
 

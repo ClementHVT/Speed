@@ -24,7 +24,7 @@ func GetStats() (CPUStats, MemStats, error) {
 	var cpuStats CPUStats
 	var memStats MemStats
 
-	// --- CPU Info (MHz) ---
+	// CPU Info
 	infos, err := cpu.Info()
 	if err != nil {
 		return cpuStats, memStats, err
@@ -43,7 +43,7 @@ func GetStats() (CPUStats, MemStats, error) {
 		cpuStats.AvgMHz = totalMHz / float64(coreCount)
 	}
 
-	// --- CPU Usage ---
+	// CPU Usage
 	percent, err := cpu.Percent(time.Second, true)
 	if err != nil {
 		return cpuStats, memStats, err
@@ -61,7 +61,7 @@ func GetStats() (CPUStats, MemStats, error) {
 		cpuStats.Usage = totalUsage / float64(len(percent))
 	}
 
-	// --- Memory ---
+	// Memory 
 	vm, err := mem.VirtualMemory()
 	if err != nil {
 		return cpuStats, memStats, err

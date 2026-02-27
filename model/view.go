@@ -41,7 +41,7 @@ func (m Model) View() string {
 	view += "Per-Core Usage:\n"
 	for i, usage := range m.CPU.PerCoreUsage {
 		barFill := int(usage / 5)
-		view += fmt.Sprintf("  Core %d: %s %.1f%%\n", i, m.UsageBar(barFill), usage)
+		view += fmt.Sprintf("  Core %02d: %s %.1f%%\n", i, m.UsageBar(barFill), usage)
 	}
 
 	view += "\n"

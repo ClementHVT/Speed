@@ -25,14 +25,37 @@ func (m Model) View() string {
 		return fmt.Sprintf("Error: %v\n\nRetrying...\n\nPress Ctrl+C to quit", m.Err)
 	}
 
-	filledCPU := int(m.CPU / 5)
-	filledMem := int(m.Mem / 5)
+	// Header
+	view := "───────────────────────── SYSTEM STATS ─────────────────────────\n\n"
 
-	return fmt.Sprintf(
-		"%s CPU : %.2f%%\n\n%s Memory : %.2f%%\n\nPress Ctrl+C to quit.",
-		m.UsageBar(filledCPU),
-		m.CPU,
-		m.UsageBar(filledMem),
-		m.Mem,
+	// CPU Average 
+	view += fmt.Sprintf(
+		"CPU (Avg: %.1f%%) %s %.1f%%\n",
+		m.UI.CPUPercent,
+		m.UsageBar(m.UI.CPUBarFill),
+		m.UI.CPUPercent,
 	)
+
+	// Per-Core Usage 
+	view += "Per-Core Usage:\n"
+	for i, usage := range m.CPU.PerCoreUsage {
+		barFill := int(usage / 5)
+		view += fmt.Sprintf("  Core %d: %s %.1f%%\n", i, m.UsageBar(barFill), usage)
+	}
+
+	view += "\n"
+
+	// Memory
+	view += fmt.Sprintf(
+		"Memory: %.1f%% %s %s/%s\n",
+		m.UI.MemPercent,
+		m.UsageBar(m.UI.MemBarFill),
+		m.UI.MemUsedStr,
+		m.UI.MemTotalStr,
+	)
+
+	view += "\n───────────────────────────────────────────────────────────────\n"
+	view += "Press Ctrl+C to quit"
+
+	return view
 }

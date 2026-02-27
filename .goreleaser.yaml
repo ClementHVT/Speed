@@ -1,5 +1,5 @@
 version: 2
-project_name: system-stats
+project_name: Speed
 
 before:
   hooks:

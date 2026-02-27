@@ -26,7 +26,7 @@ func (m Model) View() string {
 	}
 
 	// Header
-	header := fmt.Sprintf("─── SYSTEM STATS [%s] ──────────────────────────", m.Version)
+	header := fmt.Sprintf("─── SPEED by ClementHVT [%s] ──────────────────────────", m.Version)
 	view := header + "\n\n"
 
 	// CPU Average

@@ -26,9 +26,10 @@ func (m Model) View() string {
 	}
 
 	// Header
-	view := "───────────────────────── SYSTEM STATS ─────────────────────────\n\n"
+	header := fmt.Sprintf("─── SYSTEM STATS [%s] ──────────────────────────", m.Version)
+	view := header + "\n\n"
 
-	// CPU Average 
+	// CPU Average
 	view += fmt.Sprintf(
 		"CPU (Avg: %.1f%%) %s %.1f%%\n",
 		m.UI.CPUPercent,
@@ -36,7 +37,7 @@ func (m Model) View() string {
 		m.UI.CPUPercent,
 	)
 
-	// Per-Core Usage 
+	// Per-Core Usage
 	view += "Per-Core Usage:\n"
 	for i, usage := range m.CPU.PerCoreUsage {
 		barFill := int(usage / 5)

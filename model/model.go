@@ -9,9 +9,11 @@ import (
 
 // Model represents app state
 type Model struct {
-	CPU float64
-	Mem float64
-	Err error
+	CPU      float64
+	Mem      float64
+	MemTotal uint64
+	MemUsed  uint64
+	Err      error
 }
 
 // ErrMsg wraps an error
@@ -22,11 +24,11 @@ type ErrMsg struct {
 // Tick returns a tea.Cmd that updates the model every second
 func Tick() tea.Cmd {
 	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
-		cpu, mem, err := stats.GetStats()
+		cpu, mem, memTotal, memUsed, err := stats.GetStats()
 		if err != nil {
 			return ErrMsg{Err: err}
 		}
-		return Model{CPU: cpu, Mem: mem}
+		return Model{CPU: cpu, Mem: mem, MemTotal: memTotal, MemUsed: memUsed}
 	})
 }
 
@@ -50,6 +52,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case Model:
 		m.CPU = msg.CPU
 		m.Mem = msg.Mem
+		m.MemTotal = msg.MemTotal
+		m.MemUsed = msg.MemUsed
 		m.Err = nil
 		return m, Tick()
 	}

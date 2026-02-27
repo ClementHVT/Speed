@@ -1,4 +1,4 @@
-module Speed
+module main
 
 go 1.25.4
 

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/shirou/gopsutil/v4/cpu"
+	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/mem"
 )
 
@@ -20,14 +21,21 @@ type MemStats struct {
 	Used        uint64
 }
 
-func GetStats() (CPUStats, MemStats, error) {
+type DiskStats struct {
+	UsedPercent float64
+	Total       uint64
+	Used        uint64
+}
+
+func GetStats() (CPUStats, MemStats, DiskStats, error) {
 	var cpuStats CPUStats
 	var memStats MemStats
+	var diskStats DiskStats
 
 	// CPU Info
 	infos, err := cpu.Info()
 	if err != nil {
-		return cpuStats, memStats, err
+		return cpuStats, memStats, diskStats, err
 	}
 
 	coreCount := len(infos)
@@ -46,7 +54,7 @@ func GetStats() (CPUStats, MemStats, error) {
 	// CPU Usage
 	percent, err := cpu.Percent(time.Second, true)
 	if err != nil {
-		return cpuStats, memStats, err
+		return cpuStats, memStats, diskStats, err
 	}
 
 	if len(percent) > 0 {
@@ -61,15 +69,36 @@ func GetStats() (CPUStats, MemStats, error) {
 		cpuStats.Usage = totalUsage / float64(len(percent))
 	}
 
-	// Memory 
+	// Memory
 	vm, err := mem.VirtualMemory()
 	if err != nil {
-		return cpuStats, memStats, err
+		return cpuStats, memStats, diskStats, err
 	}
 
 	memStats.UsedPercent = vm.UsedPercent
 	memStats.Total = vm.Total
 	memStats.Used = vm.Used
 
-	return cpuStats, memStats, nil
+	// Disk (cross-platform main disk detection)
+	partitions, err := disk.Partitions(false)
+	if err != nil {
+		return cpuStats, memStats, diskStats, err
+	}
+
+	for _, p := range partitions {
+		// Skip pseudo/virtual filesystems
+		if p.Fstype == "" {
+			continue
+		}
+
+		usage, err := disk.Usage(p.Mountpoint)
+		if err == nil && usage.Total > 0 {
+			diskStats.UsedPercent = usage.UsedPercent
+			diskStats.Total = usage.Total
+			diskStats.Used = usage.Used
+			break
+		}
+	}
+
+	return cpuStats, memStats, diskStats, nil
 }

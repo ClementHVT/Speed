@@ -12,6 +12,7 @@ import (
 type Model struct {
 	CPU     stats.CPUStats
 	Mem     stats.MemStats
+	Disk    stats.DiskStats
 	Err     error
 	Version string
 
@@ -19,12 +20,15 @@ type Model struct {
 }
 
 type UIData struct {
-	CPUPercent  float64
-	MemPercent  float64
-	CPUBarFill  int
-	MemBarFill  int
-	MemUsedStr  string
-	MemTotalStr string
+	CPUPercent   float64
+	MemPercent   float64
+	CPUBarFill   int
+	MemBarFill   int
+	MemUsedStr   string
+	MemTotalStr  string
+	DiskPercent  float64
+	DiskUsedStr  string
+	DiskTotalStr string
 }
 
 // ErrMsg wraps an error
@@ -33,18 +37,19 @@ type ErrMsg struct {
 }
 
 type StatsMsg struct {
-	CPU stats.CPUStats
-	Mem stats.MemStats
+	CPU  stats.CPUStats
+	Mem  stats.MemStats
+	Disk stats.DiskStats
 }
 
 // Tick returns a tea.Cmd that updates the model every second
 func Tick() tea.Cmd {
 	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
-		cpu, mem, err := stats.GetStats()
+		cpu, mem, disk, err := stats.GetStats()
 		if err != nil {
 			return ErrMsg{Err: err}
 		}
-		return StatsMsg{CPU: cpu, Mem: mem}
+		return StatsMsg{CPU: cpu, Mem: mem, Disk: disk}
 	})
 }
 
@@ -88,6 +93,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.CPU = msg.CPU
 		m.Mem = msg.Mem
 		m.Err = nil
+		m.Disk = msg.Disk
 
 		m.UI.CPUPercent = m.CPU.Usage
 		m.UI.MemPercent = m.Mem.UsedPercent
@@ -95,6 +101,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.UI.MemBarFill = int(m.UI.MemPercent / 5)
 		m.UI.MemUsedStr = formatBytes(m.Mem.Used)
 		m.UI.MemTotalStr = formatBytes(m.Mem.Total)
+		m.UI.DiskPercent = m.Disk.UsedPercent
+		m.UI.DiskUsedStr = formatBytes(m.Disk.Used)
+		m.UI.DiskTotalStr = formatBytes(m.Disk.Total)
 
 		return m, Tick()
 	}

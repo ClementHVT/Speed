@@ -55,6 +55,15 @@ func (m Model) View() string {
 		m.UI.MemTotalStr,
 	)
 
+	// Disk
+	view += fmt.Sprintf(
+		"Disk: %.1f%% %s %s/%s\n",
+		m.UI.DiskPercent,
+		m.UsageBar(int(m.UI.DiskPercent/5)),
+		m.UI.DiskUsedStr,
+		m.UI.DiskTotalStr,
+	)
+
 	view += "\n───────────────────────────────────────────────────────────────\n"
 	view += "Press Ctrl+C to quit"
 

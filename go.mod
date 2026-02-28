@@ -1,5 +1,4 @@
-module main
-
+module github.com/ClementHVT/Speed
 go 1.25.4
 
 require (

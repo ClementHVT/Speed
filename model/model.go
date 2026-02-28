@@ -2,8 +2,9 @@ package model
 
 import (
 	"fmt"
-	"main/stats"
 	"time"
+
+	"github.com/ClementHVT/Speed/stats"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

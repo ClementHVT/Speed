@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"main/model"
 	"os"
+
+	"github.com/ClementHVT/Speed/model"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

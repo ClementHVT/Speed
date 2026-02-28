@@ -15,3 +15,9 @@
 ### Run
 
 ```go run main.go```
+
+### Tag
+
+```git tag -a vx.y.z -m "Release vx.y.z - Speed by ClementHVT"```
+
+```git push origin vx.y.z```
